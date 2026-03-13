@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PaperPlus ICT Academy</title>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* ===== GENERAL ===== */
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin:0;
+  background:#ffffff;
+  color:#333;
+}
+a{text-decoration:none;}
+
+/* ===== NAVIGATION ===== */
+nav{
+  background:#ff7a00;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  padding:15px 40px;
+  position: sticky;
+  top:0;
+  z-index: 1000;
+  border-bottom:4px solid #ffa347;
+}
+nav ul{
+  display:flex;
+  list-style:none;
+}
+nav ul li{
+  margin-left:20px;
+}
+nav ul li a{
+  color:white;
+  font-weight:bold;
+  padding:6px 12px;
+  border-radius:6px;
+  transition:0.3s;
+}
+nav ul li a:hover{
+  background:#ffa347;
+}
+
+/* ===== LOGO ===== */
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+}
+.logo span{
+  font-size:32px;
+  margin-right:8px;
+  transform: rotate(-15deg);
+}
+
+/* ===== HOME PAGE ===== */
+#home{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:60px 20px;
+}
+#home h1{
+  font-size:42px;
+  margin-bottom:10px;
+  color:#ff7a00;
+  text-align:center;
+  text-shadow:1px 1px 4px #ffa347;
+}
+#home p{
+  font-size:20px;
+  margin-bottom:50px;
+  text-align:center;
+}
+
+/* ===== HOME OPTIONS CARDS ===== */
+.options{
+  display:flex;
+  justify-content:center;
+  flex-wrap: wrap;
+  gap:40px;
+}
+.card{
+  background:white;
+  padding:30px;
+  text-align:center;
+  border-radius:20px;
+  width:220px;
+  transition:0.5s;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-top: 5px solid #ff7a00;
+}
+.card img{
+  width:70px;
+  margin-bottom:15px;
+  transition: transform 0.3s;
+}
+.card:hover img{
+  transform: rotate(15deg) scale(1.1);
+}
+.card h2{
+  margin-bottom:15px;
+  color:#ff7a00;
+}
+.card button{
+  padding:10px 20px;
+  border:none;
+  border-radius:12px;
+  background:#ff7a00;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+.card button:hover{
+  background:#ffa347;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* ===== LOGIN BOX ===== */
+.login-box{
+  width:350px;
+  margin:40px auto;
+  background:white;
+  padding:30px;
+  text-align:center;
+  border-radius:15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.login-box input{
+  width:90%;
+  padding:10px;
+  margin:8px;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+.login-box button{
+  background:#ff7a00;
+  color:white;
+  border:none;
+  padding:10px;
+  width:95%;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+.login-box button:hover{
+  background:#ffa347;
+}
+
+/* ===== PAGE TITLES ===== */
+.page-title{
+  text-align:center;
+  margin-top:40px;
+  font-size:28px;
+  color:#ff7a00;
+}
+
+/* ===== PAPERS & RECORDINGS ===== */
+.papers, .recordings{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap: wrap;
+  margin-top:40px;
+}
+.paper, .rec{
+  background:white;
+  padding:20px;
+  text-align:center;
+  border-radius:15px;
+  width:200px;
+  color:#ff7a00;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  transition:0.4s;
+  border-top: 4px solid #ff7a00;
+}
+.paper:hover, .rec:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+.paper button, .rec a{
+  display:inline-block;
+  margin-top:10px;
+  padding:8px 15px;
+  background:#ff7a00;
+  color:white;
+  border-radius:8px;
+  font-weight:bold;
+  transition:0.3s;
+}
+.paper button:hover, .rec a:hover{
+  background:#ffa347;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard{
+  width:750px;
+  margin:auto;
+  text-align:center;
+  padding:40px;
+  background:white;
+  border-radius:15px;
+  margin-top:40px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.mark-entry input{
+  padding:10px;
+  margin:10px;
+  width:120px;
+  border:1px solid #ccc;
+  border-radius:5px;
+}
+.mark-entry button{
+  padding:10px 20px;
+  background:#ff7a00;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+.mark-entry button:hover{
+  background:#ffa347;
+}
+
+/* ===== DASHBOARD INFO BOX ===== */
+.dashboard-info{
+  display:flex;
+  justify-content:space-around;
+  margin-bottom:30px;
+  flex-wrap: wrap;
+  gap:20px;
+}
+.info-box{
+  background:#fff3e0;
+  padding:20px;
+  border-radius:12px;
+  width:160px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+.info-box h3{
+  margin-bottom:10px;
+  color:#ff7a00;
+}
+.info-box p{
+  font-size:18px;
+  font-weight:bold;
+}
+
+/* ===== STUDENT PHOTO ===== */
+.student-photo{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-bottom:10px;
+  border:3px solid #ff7a00;
+}
+
+/* ===== HIDE ALL SECTIONS INITIALLY ===== */
+section, .login-box, .dashboard, .papers, .recordings{
+  display:none;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav>
+<div class="logo"><span>📘</span>PaperPlus ICT</div>
+<ul>
+<li><a href="#" onclick="showSection('home')">Home</a></li>
+<li><a href="#" onclick="showSection('login')">Login</a></li>
+<li><a href="#" onclick="showSection('papers')">Model Papers</a></li>
+<li><a href="#" onclick="showSection('discussions')">Paper Discussions</a></li>
+<li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+</ul>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<section id="home" style="display:block;">
+<h1>PaperPlus ICT Academy</h1>
+<p>Structured learning, model papers, discussions, and track your progress professionally.</p>
+
+<div class="options">
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png">
+<h2>Model Papers</h2>
+<button onclick="showSection('papers')">Explore</button>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
+<h2>Paper Discussions</h2>
+<button onclick="showSection('discussions')">View</button>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/942/942748.png">
+<h2>Student Dashboard</h2>
+<button onclick="showSection('dashboard')">Dashboard</button>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png">
+<h2>Mark Analysis</h2>
+<button onclick="showSection('dashboard')">Analysis</button>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/748/748113.png">
+<h2>Login</h2>
+<button onclick="showSection('login')">Login</button>
+</div>
+
+</div>
+</section>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-box" id="login">
+<h2>Student Login</h2>
+<input type="text" placeholder="Username" id="loginUser">
+<input type="password" placeholder="Password" id="loginPass">
+<button onclick="login()">Login</button>
+
+<p>Don't have an account?</p>
+<h3>Create New Account</h3>
+<input type="text" placeholder="Full Name" id="newName">
+<input type="text" placeholder="Username" id="newUser">
+<input type="password" placeholder="Password" id="newPass">
+<button onclick="createAccount()">Create Account</button>
+</div>
+
+<!-- ===== MODEL PAPERS ===== -->
+<div class="papers" id="papers">
+<h1 class="page-title">Monthly Model Papers</h1>
+<div class="paper">
+<h3>January Week 1</h3>
+<button>Preview</button>
+<a href="#">Download</a>
+</div>
+<div class="paper">
+<h3>January Week 2</h3>
+<button>Preview</button>
+<a href="#">Download</a>
+</div>
+<div class="paper">
+<h3>January Week 3</h3>
+<button>Preview</button>
+<a href="#">Download</a>
+</div>
+<div class="paper">
+<h3>January Week 4</h3>
+<button>Preview</button>
+<a href="#">Download</a>
+</div>
+</div>
+
+<!-- ===== DISCUSSIONS ===== -->
+<div class="recordings" id="discussions">
+<h1 class="page-title">Paper Discussion Recordings</h1>
+<div class="rec">
+<h3>January Week 1 Discussion</h3>
+<a href="#">Watch Recording</a>
+</div>
+<div class="rec">
+<h3>January Week 2 Discussion</h3>
+<a href="#">Watch Recording</a>
+</div>
+<div class="rec">
+<h3>January Week 3 Discussion</h3>
+<a href="#">Watch Recording</a>
+</div>
+<div class="rec">
+<h3>January Week 4 Discussion</h3>
+<a href="#">Watch Recording</a>
+</div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard" id="dashboard">
+<h1>Student Performance & Mark Analysis</h1>
+
+<!-- STUDENT INFO -->
+<div class="dashboard-info">
+<div class="info-box">
+<img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" class="student-photo">
+<h3>Student</h3>
+<p id="studentName">N/A</p>
+</div>
+<div class="info-box">
+<h3>Papers Written</h3>
+<p id="papersWritten">0</p>
+</div>
+<div class="info-box">
+<h3>Grade</h3>
+<p id="grade">N/A</p>
+</div>
+<div class="info-box">
+<h3>Average</h3>
+<p id="avgMark">0</p>
+</div>
+</div>
+
+<!-- MARK ENTRY -->
+<div class="mark-entry">
+<input id="week" placeholder="Week Number">
+<input id="marks" placeholder="Marks">
+<button onclick="addMarks()">Add Marks</button>
+</div>
+
+<!-- CHART -->
+<canvas id="marksChart"></canvas>
+</div>
+
+<script>
+// ===== NAVIGATION FUNCTION =====
+function showSection(id){
+  const sections=['home','login','papers','discussions','dashboard'];
+  sections.forEach(sec => {
+    document.getElementById(sec).style.display = (sec===id)?'block':'none';
+  });
+}
+
+// ===== ACCOUNTS =====
+let accounts = [];
+let currentUser = null;
+
+function createAccount(){
+  const name=document.getElementById('newName').value;
+  const user=document.getElementById('newUser').value;
+  const pass=document.getElementById('newPass').value;
+  if(name && user && pass){
+    accounts.push({name,user,pass,papers:[],average:0});
+    alert('Account Created! You can login now.');
+  } else alert('Fill all fields!');
+}
+
+function login(){
+  const user=document.getElementById('loginUser').value;
+  const pass=document.getElementById('loginPass').value;
+  const acc=accounts.find(a=>a.user===user && a.pass===pass);
+  if(acc){
+    currentUser = acc;
+    alert('Login Successful!');
+    showSection('dashboard');
+    updateDashboard();
+  } else alert('Invalid login!');
+}
+
+// ===== DASHBOARD =====
+let weeks=[];
+let marks=[];
+const ctx=document.getElementById("marksChart").getContext("2d");
+let chart=new Chart(ctx,{
+  type:'line',
+  data:{labels:weeks,datasets:[{label:'Marks',data:marks, borderColor:'#ff7a00', tension:0.3, fill:false}]},
+  options:{scales:{y:{beginAtZero:true, max:100}}}
+});
+
+function addMarks(){
+  let week=document.getElementById("week").value;
+  let mark=document.getElementById("marks").value;
+  if(week && mark && currentUser){
+    weeks.push("Week "+week);
+    marks.push(parseInt(mark));
+    chart.update();
+
+    currentUser.papers.push(parseInt(mark));
+    let total=currentUser.papers.reduce((a,b)=>a+b,0);
+    currentUser.average=(total/currentUser.papers.length).toFixed(2);
+
+    updateDashboard();
+  } else alert("Enter week, marks, and login first!");
+}
+
+function updateDashboard(){
+  if(currentUser){
+    document.getElementById("studentName").innerText=currentUser.name;
+    document.getElementById("papersWritten").innerText=currentUser.papers.length;
+    document.getElementById("avgMark").innerText=currentUser.average;
+
+    // Grade calculation
+    let grade='N/A';
+    let avg = parseFloat(currentUser.average);
+    if(avg>=90) grade='A+';
+    else if(avg>=80) grade='A';
+    else if(avg>=70) grade='B+';
+    else if(avg>=60) grade='B';
+    else grade='C';
+    document.getElementById("grade").innerText=grade;
+  }
+}
+</script>
+
+</body>
+</html>
